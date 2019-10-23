@@ -6,7 +6,6 @@
       <router-view v-if="$route.meta.keepAlive">
       </router-view>
     </keep-alive>
-
     <router-view v-if="!$route.meta.keepAlive">
     </router-view>
   </div>
@@ -15,7 +14,7 @@
 <script>
 import compRandom from './components/coordinate-random/main';
 // 引入默认全局css
-import './assets/css/default.css' ;
+import './assets/css/default.css';
 export default {
   name: 'App',
   components: {
@@ -24,13 +23,13 @@ export default {
   data() {
     return {
       include: [],
-      coordinateRandom:{
-        radious:2,
-        timeSet:{
-          hide:1000
+      // coordinateRandom是传入  compRandom 组件所需要的值
+      coordinateRandom: {
+        radious: 2,
+        timeSet: {
+          hide: 1000
         },
-        // countArr:[1,2,3,5,5,6,7,8,9,9]
-        countArr:[1,3,2,1,1,1,1,1,1,1]
+        countArr: [1, 3, 2, 1, 1, 1, 1, 1, 1, 1]
       }
     };
   },
