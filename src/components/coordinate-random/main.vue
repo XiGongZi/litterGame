@@ -1,6 +1,6 @@
 <template>
   <div class="coordinate-random">
-    <div class="background">
+    <div class="background" @click="chapter">
       
     </div>
   </div>
@@ -12,7 +12,13 @@ export default {
   data() {
     return {
       screenInfo:[0, 0],
-      safeBorder:[[],[]]
+      safeArea:[[0,0],[0,0]],
+      coordStatus:{
+        totalNum:0,
+        now:0,
+        nowList:0,
+        coordinates:[]
+      }
     };
   },
   props: {
@@ -48,7 +54,20 @@ export default {
       let x = this.screenInfo[0];
       let y = this.screenInfo[1];
       console.log([r,x,y])
-      this.safeBorder =  [[r,r],[x-r,y-r]];
+      this.safeArea =  [[r,r],[x-r,y-r]];
+      // 开始从countArr依次生成随机安全坐标
+      this.coordStatus = {
+        totalNum : this.coordinateRandom.countArr.length,
+        nowList : this.coordinateRandom.countArr[0],
+        now : 0,
+        next:1,
+        nextList:this.coordinateRandom.countArr[1],
+        coordinates:[]
+      }
+
+      // console.log(this.randomCoor())
+      // console.log(this.randomCoor())
+      // console.log(this.randomCoor())
     }
   },
   methods: {
@@ -67,14 +86,66 @@ export default {
           a.计算已生成的圆心和刚生成的圆心距离是否大于两者半径的和，是则安全，否则不安全需要重新生成
             GetDistance([],[])
     */
+    // 随机一个安全区域内的坐标
     randomCoor:function(){
       /*接受值：
-          1.
+          1.安全区域
       */
+      if(this.safeArea === [[0,0],[0,0]]){
+        return false;
+      }else{
+        return [_.random(this.safeArea[0][0],this.safeArea[1][0]),
+                _.random(this.safeArea[0][1],this.safeArea[1][1])]
+      }
     },
+    // 返回一个在安全区域内的坐标
+    judgeSafe:function(sampleArr){
+      // 需要传入被检测的坐标和检测样本
+      // 需要一个递归检测，如果满足条件则输出，否则递归（n次）
+      var ran = this.randomCoor();
+      for(let i in sampleArr){
+        // sampleArr[i]
+        console.log(this.GetDistance(ran,sampleArr[i]))
+        if(this.GetDistance(ran,sampleArr[i]) <= (2 * this.coordinateRandom.radious) ){
+          console.log('需要递归')
+        }else{
+          console.log('成功获取值')
+          return ran;
+        }
+      }
+    },
+    // 将couontArr分组
+    chapter:function(){
+      /*  管理各个章节信息
+            1.检查当前章节与最终章节
+            2.当在安全范围内的时候，更新 coordStatus.now   coordStatus.nowList 
+            3.根据 coordStatus.nowList 动态生成相应数量的 coordStatus.coordinates
+            
+       */
+      if(this.coordStatus.next < this.coordStatus.totalNum ){
+        var newArr = []
+        for(let i = 0;i < this.coordStatus.nextList;i ++){
+          var coor = [];
+          if (newArr.length === 0){
+            coor = this.randomCoor();
+          }else{
+            coor = this.judgeSafe(newArr)
+          }
+          if(coor !== false){
+            newArr.push(coor);
+          }
+        }
+        this.coordStatus.coordinates = newArr;
+        this.coordStatus.now = this.coordStatus.next ;
+        this.coordStatus.next = this.coordStatus.now + 1;
+        this.coordStatus.nowList = this.coordinateRandom.countArr[this.coordStatus.now]; 
+        this.coordStatus.nextList = this.coordinateRandom.countArr[this.coordStatus.next];
+      }else{
+        console.log('已经完结啦！')
+      }
+    },
+    // 求得平方根
     GetDistance:function([x1,y1],[x2,y2]){
-        console.log(x2)
-        console.log('x2')
         var radLat1 = x1 - x2;
         var radLat2 = y1 - y2;
         return Math.sqrt(Math.pow(radLat1,2) + Math.pow(radLat2,2));
