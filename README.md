@@ -1,21 +1,8 @@
-# easy-front-vue-cli3
-
 基于 vue cli3 的项目工程模板
 
 ## 使用方法
 
 ### clone 项目到本地
-
-```
-https://github.com/LuLuCodes/easy-front-vue-cli3.git
-
-```
-
-### 删除.git 和修改项目名称
-
-```
-rm -rf .git
-```
 
 ### 安装依赖
 
@@ -60,35 +47,6 @@ yarn run lint
 .env.pre-release // 预发布环境
 .env.production // 生产环境
 .env.test // 测试环境
-```
-
-### 以cdn方式引用第三方资源（以vant为例），修改 vue.config.js
-```
-var externals = {
-  vue: 'Vue',
-  axios: 'axios',
-  'vue-router': 'VueRouter',
-  vuex: 'Vuex',
-  vant: 'vant' // 生产环境打包时排除vant
-}
-config.externals(externals)
-const cdn = {
-  css: [
-    'https://cdn.myun.info/vant-1.6.11/index.css'' // 引用vant css
-  ],
-  js: [
-    // vue
-    'https://cdn.myun.info/vue-2.6.10/vue.min.js',
-    // vue-router
-    'https://cdn.myun.info/vue-router-3.0.2/vue-router.min.js',
-    // vuex
-    'https://cdn.myun.info/vuex-3.1.0/vuex.min.js',
-    // axios
-    'https://cdn.myun.info/axios-0.18.0/axios.min.js',
-    // vant
-    'https://cdn.myun.info/vant-1.6.11/vant.min.js' // 引用vant库
-    ]
-}
 ```
 
 ### 新建页面或组件
